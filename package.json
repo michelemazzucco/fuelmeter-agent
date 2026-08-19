@@ -1,0 +1,29 @@
+{
+  "name": "fuelmeter-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "mastra dev",
+    "build": "mastra build",
+    "start": "mastra start"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^4.0.36",
+    "@libsql/client": "^0.17.4",
+    "@mastra/core": "1.57.0",
+    "@mastra/libsql": "^1.19.0",
+    "@mastra/memory": "^1.26.0",
+    "@mastra/observability": "^1.16.5",
+    "date-fns": "^4.4.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "mastra": "1.23.0",
+    "typescript": "^6.0.3"
+  }
+}
