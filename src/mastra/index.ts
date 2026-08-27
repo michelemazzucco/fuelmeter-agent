@@ -15,7 +15,8 @@ export const mastra = new Mastra({
   tools: { getTankStatus, listReadings, logReading, forecastRunout },
   storage: new LibSQLStore({
     id: 'agent-storage',
-    url: 'file:./mastra.db',
+    url: process.env.MASTRA_DB_URL!,
+    authToken: process.env.MASTRA_DB_AUTH_TOKEN,
   }),
   observability: new Observability({
     configs: {
