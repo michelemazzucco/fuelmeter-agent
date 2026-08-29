@@ -27,14 +27,18 @@ Consequences worth knowing before editing:
 - Git tracks the symlink, not the contents. A clone without the sibling project checked out will not typecheck or run.
 - Prediction maths belongs in `predictions.ts`, not in a tool. Tools reshape its output for the model; they do not compute burn rates.
 
-## Two separate databases
+## One database, two kinds of table
 
-Do not conflate them:
+`TURSO_DATABASE_URL` / `TURSO_AUTH_TOKEN` is the only database the project uses. Both of these read it:
 
-- **App data** (`readings`, `tank_config` tables) — a libSQL/Turso database reached through `src/mastra/db.ts` using `TURSO_DATABASE_URL` / `TURSO_AUTH_TOKEN`. Locally this points at `file:/Users/michele/Projects/fuelmeter/local.db`, the web app's own database. Writes from `log_reading` land in the app's real data.
-- **Agent storage** (`file:./mastra.db`, materialised under `src/mastra/public/`) — the `LibSQLStore` configured in `src/mastra/index.ts`, holding Memory threads and observability traces. Nothing domain-related lives here.
+- **App data** (`readings`, `tank_config`) — reached through `src/mastra/db.ts`. Writes from `log_reading` land in the web app's real data.
+- **Agent storage** — the `LibSQLStore` in `src/mastra/index.ts`, holding Memory threads and observability traces. Mastra creates its own tables; they sit beside the app tables in the same database.
 
-All DB access goes through the two helpers in `db.ts` (`getConfig`, `getReadings`) plus the single insert in `log_reading`. `getReadings` returns newest-first; `computePrediction` re-sorts internally.
+Locally the URL points at the deployed Turso database, not at the web app's `local.db`.
+
+All domain DB access goes through the two helpers in `db.ts` (`getConfig`, `getReadings`) plus the single insert in `log_reading`. `getReadings` returns newest-first; `computePrediction` re-sorts internally.
+
+Both call sites build their client at module scope with `process.env.X!`. A missing variable therefore throws `LibsqlError: URL_INVALID` at import, before the server starts, and the message does not name the variable.
 
 ## Agent and tools
 

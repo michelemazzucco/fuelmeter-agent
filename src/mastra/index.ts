@@ -15,8 +15,8 @@ export const mastra = new Mastra({
   tools: { getTankStatus, listReadings, logReading, forecastRunout },
   storage: new LibSQLStore({
     id: 'agent-storage',
-    url: process.env.MASTRA_DB_URL!,
-    authToken: process.env.MASTRA_DB_AUTH_TOKEN,
+    url: process.env.TURSO_DATABASE_URL!,
+    authToken: process.env.TURSO_AUTH_TOKEN,
   }),
   observability: new Observability({
     configs: {
