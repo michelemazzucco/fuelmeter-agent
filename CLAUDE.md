@@ -17,14 +17,13 @@ npx tsc --noEmit  # typecheck; tsconfig has noEmit, there is no emit step
 
 There is no test suite and no linter configured.
 
-## The symlink into the sibling project
+## The vendored copy of the sibling project's lib
 
-`src/fuelmeter-lib` is a **symlink** to `/Users/michele/Projects/fuelmeter/lib`. The domain logic — the cm→litre calibration table (`tank-lookup.ts`), the seasonal consumption model (`predictions.ts`), and the `Reading`/`TankConfig` types — lives there and is shared with the web app.
+`src/fuelmeter-lib` is a **vendored copy** of `/Users/michele/Projects/fuelmeter/lib`, committed into this repo. It was a symlink; it is not one any more, so a fresh clone typechecks and builds on its own. The domain logic — the cm→litre calibration table (`tank-lookup.ts`), the seasonal consumption model (`predictions.ts`), and the `Reading`/`TankConfig` types — originates in the web app.
 
 Consequences worth knowing before editing:
 
-- Editing anything under `src/fuelmeter-lib/` edits the other project. Changes there affect the web app too; treat it as read-only unless the change is genuinely shared.
-- Git tracks the symlink, not the contents. A clone without the sibling project checked out will not typecheck or run.
+- The copy can drift from the web app. A change that belongs to both projects should be made in `/Users/michele/Projects/fuelmeter/lib` first, then copied back here.
 - Prediction maths belongs in `predictions.ts`, not in a tool. Tools reshape its output for the model; they do not compute burn rates.
 
 ## One database, two kinds of table

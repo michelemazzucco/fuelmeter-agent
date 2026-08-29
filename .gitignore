@@ -3,7 +3,10 @@ dist
 .mastra
 .env
 .env.*
+!.env.example
 *.db
 *.db-*
 *.duckdb
 *.duckdb.wal
+.DS_Store
+.claude/settings.local.json
